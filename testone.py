@@ -362,54 +362,40 @@ with tab3:
     st.write("First, The Worst")
 
     with col1_row2:
-        st.subheader("Ugly Earnings Chart")
-
         import pandas as pd
         import matplotlib.pyplot as plt
-
+        import streamlit as st
+        
         # Load dataset
         genderpay = pd.read_csv('Glassdoor Gender Pay Gap.csv')
-
+        
         # Calculate total earnings
         genderpay['TotalPay'] = genderpay['BasePay'] + genderpay['Bonus']
         totals = genderpay.groupby('Gender')['TotalPay'].sum()
-
-        # Plot
-        fig, ax = plt.subplots(figsize=(7.2, 4.3))  # weird size
-        bars = ax.bar(totals.index, totals.values, color='#FFA500', edgecolor='purple', hatch='//')
-
-        # Add awkward labels
+        
+        # Plotting
+        fig, ax = plt.subplots(figsize=(6, 5))
+        bars = ax.bar(totals.index, totals.values, color='orange')
+        
+        # Add labels
         for bar in bars:
             height = bar.get_height()
-            ax.text(
-                bar.get_x() + bar.get_width() / 2,
-                height + 2000,
-                f"${height:,.0f}",
-                ha='center',
-                va='bottom',
-                fontsize=10,
-                color='limegreen',
-                rotation=12,
-                fontweight='heavy',
-            )
-
-        # Make it ugly
-        ax.set_title("Total Earnings By Gender (Kinda Ugly)", fontsize=16, color='crimson', fontweight='light')
-        ax.set_ylabel("Earningz in Dollars $$$", fontsize=13, color='blue')
-        ax.tick_params(axis='y', colors='teal', width=2, direction='inout')
-        ax.set_facecolor('#f7f7f0')
-
-        # Clashy spines
-        ax.spines['left'].set_color('darkorange')
-        ax.spines['bottom'].set_color('hotpink')
-        ax.spines['top'].set_color('cyan')
-        ax.spines['right'].set_color('magenta')
-        ax.spines['top'].set_linewidth(2)
-        ax.spines['right'].set_linestyle('dashed')
-
-        plt.subplots_adjust(left=0.22, right=0.88, top=0.88, bottom=0.22)
-
+            ax.text(bar.get_x() + bar.get_width() / 2, height + height * 0.02,
+                    f'${int(height):,}', ha='center', color='orange', fontsize=12, weight='bold')
+        
+        # Styling
+        ax.set_title('Total Earnings by Gender', color='orange', fontsize=14, weight='bold')
+        ax.set_ylabel('Total Earnings ($)', color='orange', fontsize=12)
+        ax.set_xticklabels(totals.index, color='orange', fontsize=12)
+        ax.tick_params(axis='y', colors='orange')
+        ax.spines['bottom'].set_color('orange')
+        ax.spines['left'].set_color('orange')
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        
+        plt.tight_layout()
         st.pyplot(fig)
+
     
 
 
