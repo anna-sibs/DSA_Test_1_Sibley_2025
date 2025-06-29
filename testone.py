@@ -318,7 +318,7 @@ with tab2:
 
         st.plotly_chart(fig_growth_satisfaction, use_container_width=True)
 
-with col1_row2:
+with col2_row2:
         st.subheader("Retention and Satisfaction Over Time")
 
 
