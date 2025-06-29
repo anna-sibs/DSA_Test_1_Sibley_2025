@@ -32,6 +32,33 @@ with tab1:
 import plotly.express as px
 
 st.subheader("🗺️ Flight Paths into O'Hare")
+# Ensure data is loaded and merged
+flights = pd.read_csv("Airports_P 1.csv")     # Flight data
+airports = pd.read_csv("airports.csv")        # Airport metadata
+
+# Filter flights arriving at ORD
+ord_flights = flights[flights['Destination_airport'] == 'ORD']
+
+# Merge airport info into ORD flight records
+ord_enriched = ord_flights.merge(
+    airports[['IATA', 'AIRPORT', 'CITY', 'STATE', 'COUNTRY', 'LATITUDE', 'LONGITUDE']],
+    how='left',
+    left_on='Origin_airport',
+    right_on='IATA'
+)
+
+# Rename for clarity
+ord_enriched = ord_enriched.rename(columns={
+    'AIRPORT': 'Origin_airport_name',
+    'CITY': 'Origin_city',
+    'STATE': 'Origin_state',
+    'COUNTRY': 'Origin_country',
+    'LATITUDE': 'Origin_latitude',
+    'LONGITUDE': 'Origin_longitude'
+})
+
+# Drop duplicates by origin airport (if needed)
+ord_enriched_unique = ord_enriched.drop_duplicates(subset='Origin_airport')
 
 st.markdown("""
 This interactive map visualizes **unique flight routes into Chicago O'Hare International Airport (ORD)**. Each route line represents a direct connection from a U.S. airport, and the color indicates the **origin state** of the flight.
