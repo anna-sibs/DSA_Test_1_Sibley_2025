@@ -342,10 +342,10 @@ with tab2:
             barmode='group',
                     legend=dict(
                         title='Metric',
-                        x=1.05,            # position to the right of the graph
+                        x=1.05,
                         y=1,
                         xanchor='left',
-                        yanchor='top'
+                        yanchor='top',
                     )
             margin=dict(l=80, r=80, t=100, b=80),
             hovermode='x unified',
