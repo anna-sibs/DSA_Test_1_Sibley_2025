@@ -120,6 +120,40 @@ else:
 
     st.plotly_chart(fig, use_container_width=True)
 
+st.subheader("📊 Number of Flights into O'Hare by State")
+
+st.markdown("""
+This bar chart shows the **volume of flights into Chicago O'Hare (ORD)**, grouped by the **state of the origin airport**.
+
+- The chart helps highlight which states send the most flights to ORD.
+- Use this to identify regional concentrations, travel corridors, or high-traffic partnerships.
+""")
+
+# Count flights per origin state
+state_counts = ord_enriched['Origin_state'].value_counts().reset_index()
+state_counts.columns = ['Origin_state', 'Flight_Count']
+state_counts = state_counts.sort_values(by='Flight_Count', ascending=False)
+
+# Create bar chart
+fig2 = go.Figure(go.Bar(
+    x=state_counts['Origin_state'],
+    y=state_counts['Flight_Count'],
+    text=state_counts['Flight_Count'],
+    textposition='outside',
+    marker_color='green'
+))
+
+fig2.update_layout(
+    title="Flights into Chicago O'Hare (ORD) by Origin State",
+    xaxis_title="Origin State",
+    yaxis_title="Number of Flights",
+    xaxis_tickangle=-45,
+    bargap=0.2,
+    margin=dict(l=20, r=20, t=60, b=40)
+)
+
+st.plotly_chart(fig2, use_container_width=True)
+
 
 
 
