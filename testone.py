@@ -154,6 +154,54 @@ fig2.update_layout(
 
 st.plotly_chart(fig2, use_container_width=True)
 
+st.subheader("🏙️ Origin City Populations by State")
+
+st.markdown("""
+This chart displays the **combined population of all cities sending flights into Chicago O'Hare (ORD)**, stacked by their **origin state**.
+
+- Each bar shows the total originating population per state.
+- Each color within the stack represents a different origin city.
+- Hover over segments to view the **specific airport name and population**.
+""")
+
+# Prepare data (drop missing values)
+data = ord_enriched_unique[['Origin_state', 'Origin_city', 'Origin_airport_name', 'Origin_population']].dropna()
+
+# Sort states by total population
+state_totals = data.groupby('Origin_state')['Origin_population'].sum().sort_values(ascending=False)
+ordered_states = state_totals.index.tolist()
+
+# Add custom hover text
+data['hover_text'] = (
+    data['Origin_airport_name'] + "<br>Population: " + data['Origin_population'].astype(int).astype(str)
+)
+
+# Create stacked bar chart
+fig3 = px.bar(
+    data,
+    x='Origin_state',
+    y='Origin_population',
+    color='Origin_city',
+    text='hover_text',
+    category_orders={'Origin_state': ordered_states},
+    labels={'Origin_population': 'Population', 'Origin_state': 'State'},
+    title='Stacked Bar: Origin City Populations by State'
+)
+
+fig3.update_traces(
+    hoverinfo='text',
+    texttemplate=None  # Disable default bar labels
+)
+
+fig3.update_layout(
+    barmode='stack',
+    xaxis_tickangle=-45,
+    yaxis_title='Total Population (Sum)',
+    showlegend=False,
+    margin=dict(l=0, r=0, t=40, b=0)
+)
+
+st.plotly_chart(fig3, use_container_width=True)
 
 
 
