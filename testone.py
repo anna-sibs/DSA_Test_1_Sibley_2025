@@ -246,7 +246,7 @@ with tab2:
 
     # Row 2 - Two columns, 75/25
     st.markdown("## Satisfaction, Retention, and Growth Rates")
-    col1_row2, col2_row2 = st.columns(2)
+    col1_row2, col2_row2 = st.columns(3,1)
 
     with col1_row2:
         st.subheader("Department Growth and Satisfaction Rates")
@@ -320,6 +320,39 @@ with tab2:
 
 with col2_row2:
         st.subheader("Retention and Satisfaction Over Time")
+        fig_rates = go.Figure()
+
+        # Add Retention Rate line
+        fig_rates.add_trace(go.Scatter(
+            x=filtered_students['Term_Label'],
+            y=filtered_students['Retention Rate (%)'],
+            mode='lines+markers',
+            name='Retention Rate (%)',
+            line=dict(color='darkgreen', width=3),
+            marker=dict(size=6)
+        ))
+    
+        # Add Satisfaction Rate line
+        fig_rates.add_trace(go.Scatter(
+            x=filtered_students['Term_Label'],
+            y=filtered_students['Student Satisfaction (%)'],
+            mode='lines+markers',
+            name='Student Satisfaction (%)',
+            line=dict(color='royalblue', width=3),
+            marker=dict(size=6)
+        ))
+    
+        # Layout
+        fig_rates.update_layout(
+            title='Student Satisfaction and Retention Rates Over Time',
+            xaxis=dict(title='Term', tickangle=-45),
+            yaxis=dict(title='Percent (%)', tickformat=".0f"),
+            showlegend=True,
+            legend_title_text='Metric',
+            margin=dict(l=40, r=40, t=60, b=60)
+        )
+    
+        st.plotly_chart(fig_rates, use_container_width=True)
 
 
 
