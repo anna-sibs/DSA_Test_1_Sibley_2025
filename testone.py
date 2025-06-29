@@ -246,7 +246,7 @@ with tab2:
 
     # Row 2 - Two columns, 75/25
     st.markdown("## Satisfaction, Retention, and Growth Rates")
-    col1_row2, col2_row2 = st.columns([2])
+    col1_row2, col2_row2 = st.columns(2)
 
     with col1_row2:
         st.subheader("Department Growth and Satisfaction Rates")
