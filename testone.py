@@ -150,36 +150,32 @@ with tab1:
 
 
 with tab2:
-    st.header("📊 Comparative Visual Analysis")
+    st.header("University Student Admissions Dashboard")
 
     # Row 1 - Two columns, 50/50
-    st.markdown("### 🔹 First Row: Even Split")
+    st.markdown("### Admissions and Enrollment")
 
     col1_row1, col2_row1 = st.columns(2)
 
     with col1_row1:
-        st.subheader("Left Column (50%)")
-        st.write("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet.")
+        st.subheader("Total Applications, Admissions, and Enrollment Over Time")
 
     with col2_row1:
-        st.subheader("Right Column (50%)")
-        st.write("Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.")
+        st.subheader("Enrollment by Deparment Over Time")
 
     # Spacer
     st.markdown("---")
 
     # Row 2 - Two columns, 75/25
-    st.markdown("### 🔸 Second Row: 75/25 Split")
+    st.markdown("### Satisfaction, Retention, and Growth Rates")
 
     col1_row2, col2_row2 = st.columns([3, 1])
 
     with col1_row2:
-        st.subheader("Left Column (75%)")
-        st.write("Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat.")
+        st.subheader("Department Growth and Satisfaction Rates")
 
     with col2_row2:
-        st.subheader("Right Column (25%)")
-        st.write("Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum.")
+        st.subheader("Variations in Fall + Spring Semesters")
 
 
 
