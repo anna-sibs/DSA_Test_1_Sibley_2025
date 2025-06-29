@@ -203,7 +203,40 @@ with tab2:
 
 
     with col2_row1:
-        st.subheader("Enrollment by Deparment Over Time")
+        st.subheader("Enrollment by Department Over Time")
+
+        import pandas as pd
+        import plotly.graph_objects as go
+
+        # Load data
+        students = pd.read_csv('university_student_dashboard_data.csv')
+
+        # Create a combined term label
+        students['Term_Label'] = students['Year'].astype(str) + ' ' + students['Term']
+        students = students.sort_values(by=['Year', 'Term'])
+
+        # Define majors and colors
+        majors = ['Engineering Enrolled', 'Business Enrolled', 'Arts Enrolled', 'Science Enrolled']
+        colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
+
+        # Calculate total enrollment per term
+        students['Total_Enrolled'] = students[majors].sum(axis=1)
+
+        # Create figure
+        fig = go.Figure()
+
+        # Add stacked area layers with % of total in hover
+        for i, major in enumerate(majors):
+            percent = (students[major] / students['Total_Enrolled'] * 100).round(1)
+            hover_text = (
+                "<b>Term:</b> " + students['Term_Label'] + "<br>" +
+                f"<b>{major}:</b> " + students[major].map('{:,}'.format) +
+                " (" + percent.map('{:.1f}'.format) + "% of total)"
+            )
+
+            fig.add_trace(go.Scatter(
+                x=students['Term_La_]()
+
 
     # Spacer
     st.markdown("---")
