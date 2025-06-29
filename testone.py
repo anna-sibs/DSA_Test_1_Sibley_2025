@@ -150,51 +150,38 @@ with tab1:
 
 
 with tab2:
-        st.header("University Student Admissions Dashboard")
-        # Sidebar filter setup (do this only once per app)
-        students = pd.read_csv('university_student_dashboard_data.csv')
-        students['Term_Label'] = students['Year'].astype(str) + ' ' + students['Term']
-    
-        st.sidebar.header("📅 Filter by Academic Term")
-        all_terms = sorted(students['Term_Label'].unique())
-        selected_terms = st.sidebar.multiselect(
-            label="Select Term(s):",
-            options=all_terms,
-            default=all_terms
-        )
-    
-        # Filtered dataset
-        filtered_students = students[students['Term_Label'].isin(selected_terms)].copy()
+    st.header("University Student Admissions Dashboard")
 
+    # Sidebar filter setup
+    students = pd.read_csv('university_student_dashboard_data.csv')
+    students['Term_Label'] = students['Year'].astype(str) + ' ' + students['Term']
 
+    st.sidebar.header("📅 Filter by Academic Term")
+    all_terms = sorted(students['Term_Label'].unique())
+    selected_terms = st.sidebar.multiselect(
+        label="Select Term(s):",
+        options=all_terms,
+        default=all_terms
+    )
+
+    filtered_students = students[students['Term_Label'].isin(selected_terms)].copy()
+
+    # Row 1 - Two columns
+    st.markdown("## Admissions and Enrollment")
+    col1_row1, col2_row1 = st.columns(2)
 
     with col1_row1:
         st.subheader("Total Applications, Admissions, and Enrollment Over Time")
 
-        # Load data
-        students = pd.read_csv('university_student_dashboard_data.csv')
-
-        # Create a combined 'Term Label' for x-axis (e.g., "2015 Spring")
-        students['Term_Label'] = students['Year'].astype(str) + ' ' + students['Term']
-
-        # Sort chronologically
-        students = students.sort_values(by=['Year', 'Term'])
-
-        # Reorder columns: largest first (Applications → Admitted → Enrolled)
         category_order = ['Enrolled', 'Admitted', 'Applications']
-
-        # Melt with correct stacking order
-        melted = students.melt(
+        melted = filtered_students.melt(
             id_vars='Term_Label',
             value_vars=category_order,
             var_name='Category',
             value_name='Count'
         )
-
-        # Reverse stacking order (largest on bottom)
         melted['Category'] = pd.Categorical(melted['Category'], categories=category_order, ordered=True)
 
-        # Create stacked area chart
         fig = px.area(
             melted,
             x='Term_Label',
@@ -212,42 +199,26 @@ with tab2:
 
         st.plotly_chart(fig, use_container_width=True)
 
-
     with col2_row1:
         st.subheader("Enrollment by Department Over Time")
 
-        import pandas as pd
-        import plotly.graph_objects as go
-
-        # Load data
-        students = pd.read_csv('university_student_dashboard_data.csv')
-
-        # Create a combined term label
-        students['Term_Label'] = students['Year'].astype(str) + ' ' + students['Term']
-        students = students.sort_values(by=['Year', 'Term'])
-
-        # Define majors and colors
         majors = ['Engineering Enrolled', 'Business Enrolled', 'Arts Enrolled', 'Science Enrolled']
         colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']
 
-        # Calculate total enrollment per term
-        students['Total_Enrolled'] = students[majors].sum(axis=1)
+        filtered_students['Total_Enrolled'] = filtered_students[majors].sum(axis=1)
 
-        # Create figure
         fig = go.Figure()
-
-                # Add stacked area layers with % of total in hover
         for i, major in enumerate(majors):
-            percent = (students[major] / students['Total_Enrolled'] * 100).round(1)
+            percent = (filtered_students[major] / filtered_students['Total_Enrolled'] * 100).round(1)
             hover_text = (
-                "<b>Term:</b> " + students['Term_Label'] + "<br>" +
-                f"<b>{major}:</b> " + students[major].map('{:,}'.format) +
+                "<b>Term:</b> " + filtered_students['Term_Label'] + "<br>" +
+                f"<b>{major}:</b> " + filtered_students[major].map('{:,}'.format) +
                 " (" + percent.map('{:.1f}'.format) + "% of total)"
             )
 
             fig.add_trace(go.Scatter(
-                x=students['Term_Label'],
-                y=students[major],
+                x=filtered_students['Term_Label'],
+                y=filtered_students[major],
                 mode='lines',
                 name=major,
                 stackgroup='one',
@@ -258,7 +229,6 @@ with tab2:
                 opacity=0.9
             ))
 
-        # Layout
         fig.update_layout(
             title='Enrolled Students by Major Over Time (% in Hover)',
             xaxis=dict(title='Term', tickangle=-45),
@@ -270,25 +240,16 @@ with tab2:
 
         st.plotly_chart(fig, use_container_width=True)
 
-
     # Spacer
     st.markdown("---")
 
     # Row 2 - Two columns, 75/25
     st.markdown("## Satisfaction, Retention, and Growth Rates")
-
     col1_row2, col2_row2 = st.columns([3, 1])
 
     with col1_row2:
         st.subheader("Department Growth and Satisfaction Rates")
-    
-        import pandas as pd
-        import plotly.graph_objects as go
-    
-        # Load data
-        students = pd.read_csv('university_student_dashboard_data.csv')
-    
-        # Define subject areas and colors
+
         subjects = ['Engineering Enrolled', 'Business Enrolled', 'Arts Enrolled', 'Science Enrolled']
         subject_colors = {
             'Engineering Enrolled': '#1f77b4',
@@ -296,19 +257,15 @@ with tab2:
             'Arts Enrolled': '#2ca02c',
             'Science Enrolled': '#d62728'
         }
-    
-        # Step 1: Aggregate enrollment by year
-        yearly = students.groupby('Year')[subjects + ['Student Satisfaction (%)']].sum().reset_index()
-    
-        # Step 2: Calculate year-over-year % change for each subject and satisfaction
+
+        yearly = filtered_students.groupby('Year')[subjects + ['Student Satisfaction (%)']].sum().reset_index()
+
         growth = yearly.copy()
         for subject in subjects:
             growth[subject] = yearly[subject].pct_change() * 100
-    
-        # Satisfaction: absolute change (not percent)
+
         growth['Satisfaction Change'] = yearly['Student Satisfaction (%)'].diff()
-    
-        # Step 3: Create bar chart traces for each subject
+
         fig = go.Figure()
         for subject in subjects:
             fig.add_trace(go.Bar(
@@ -318,8 +275,7 @@ with tab2:
                 marker_color=subject_colors[subject],
                 hovertemplate=f"%{{y:.1f}}% change<br><b>{subject.replace(' Enrolled', '')}</b><br>Year: %{{x}}<extra></extra>"
             ))
-    
-        # Step 4: Add line for satisfaction change
+
         fig.add_trace(go.Scatter(
             x=growth['Year'],
             y=growth['Satisfaction Change'],
@@ -330,16 +286,14 @@ with tab2:
             yaxis='y2',
             hovertemplate="Change: %{y:.1f}%<br>Year: %{x}<extra></extra>"
         ))
-    
-        # Step 5: Add vertical year separators
+
         for year in growth['Year'][1:]:
             fig.add_vline(
                 x=year - 0.5,
                 line=dict(color='lightgray', width=1, dash='dash'),
                 layer='below'
             )
-    
-        # Step 6: Layout
+
         fig.update_layout(
             title='Year-over-Year Enrollment Growth by Subject Area<br>with Change in Student Satisfaction Rate',
             xaxis_title='Year',
@@ -362,15 +316,8 @@ with tab2:
             hovermode='x unified',
             plot_bgcolor='white'
         )
-    
+
         st.plotly_chart(fig, use_container_width=True)
-
-
-
-    with col2_row2:
-        st.subheader("Variations in Fall + Spring Semesters")
-
-
 
 with tab3:
     st.header("Gender Pay Gap Visualizations: Best & Worst")
