@@ -391,13 +391,12 @@ with tab3:
                 color='limegreen',
                 rotation=12,
                 fontweight='heavy',
-                fontname='Comic Sans MS'
             )
 
         # Make it ugly
-        ax.set_title("Total Earnings By Gender (Kinda Ugly)", fontsize=16, color='crimson', fontweight='light', fontname='Courier New')
-        ax.set_ylabel("Earningz in Dollars $$$", fontsize=13, color='blue', fontname='Impact')
-        ax.set_xticklabels(totals.index, color='darkred', fontsize=14, fontname='Papyrus')
+        ax.set_title("Total Earnings By Gender (Kinda Ugly)", fontsize=16, color='crimson', fontweight='light')
+        ax.set_ylabel("Earningz in Dollars $$$", fontsize=13, color='blue')
+        ax.set_xticklabels(totals.index, color='darkred', fontsize=14)
         ax.tick_params(axis='y', colors='teal', width=2, direction='inout')
         ax.set_facecolor('#f7f7f0')
 
