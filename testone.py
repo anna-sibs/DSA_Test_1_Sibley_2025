@@ -225,7 +225,7 @@ with tab2:
         # Create figure
         fig = go.Figure()
 
-        # Add stacked area layers with % of total in hover
+                # Add stacked area layers with % of total in hover
         for i, major in enumerate(majors):
             percent = (students[major] / students['Total_Enrolled'] * 100).round(1)
             hover_text = (
@@ -235,7 +235,29 @@ with tab2:
             )
 
             fig.add_trace(go.Scatter(
-                x=students['Term_La_]()
+                x=students['Term_Label'],
+                y=students[major],
+                mode='lines',
+                name=major,
+                stackgroup='one',
+                line=dict(width=0.5),
+                marker=dict(color=colors[i]),
+                hoverinfo='text',
+                hovertext=hover_text,
+                opacity=0.9
+            ))
+
+        # Layout
+        fig.update_layout(
+            title='Enrolled Students by Major Over Time (% in Hover)',
+            xaxis=dict(title='Term', tickangle=-45),
+            yaxis=dict(title='Number of Enrolled Students'),
+            showlegend=True,
+            margin=dict(l=40, r=40, t=60, b=40),
+            legend_title_text='Major'
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
 
 
     # Spacer
