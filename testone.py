@@ -340,7 +340,13 @@ with tab2:
                 showgrid=False
             ),
             barmode='group',
-            legend_title_text='Metric',
+            legend=dict(
+                    title='Metric',
+                    x=0,
+                    y=1,
+                    xanchor='left',
+                    yanchor='top'
+                ),
             margin=dict(l=80, r=80, t=100, b=80),
             hovermode='x unified',
             plot_bgcolor='white'
