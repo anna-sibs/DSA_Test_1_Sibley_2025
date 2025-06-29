@@ -359,5 +359,57 @@ with col2_row2:
         
 with tab3:
     st.header("Gender Pay Gap Visualizations: Best & Worst")
-    st.write("Conclude with key insights, recommendations, or downloads.")
+    st.write("First, The Worst")
+    with col1_row2:
+    st.subheader("Ugly Earnings Chart")
+
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    # Load dataset
+    genderpay = pd.read_csv('Glassdoor Gender Pay Gap.csv')
+
+    # Calculate total earnings
+    genderpay['TotalPay'] = genderpay['BasePay'] + genderpay['Bonus']
+    totals = genderpay.groupby('Gender')['TotalPay'].sum()
+
+    # Plot
+    fig, ax = plt.subplots(figsize=(7.2, 4.3))  # weird size
+    bars = ax.bar(totals.index, totals.values, color='#FFA500', edgecolor='purple', hatch='//')
+
+    # Add awkward labels
+    for bar in bars:
+        height = bar.get_height()
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            height + 2000,
+            f"${height:,.0f}",
+            ha='center',
+            va='bottom',
+            fontsize=10,
+            color='limegreen',
+            rotation=12,
+            fontweight='heavy',
+            fontname='Comic Sans MS'
+        )
+
+    # Make it ugly
+    ax.set_title("Total Earnings By Gender (Kinda Ugly)", fontsize=16, color='crimson', fontweight='light', fontname='Courier New')
+    ax.set_ylabel("Earningz in Dollars $$$", fontsize=13, color='blue', fontname='Impact')
+    ax.set_xticklabels(totals.index, color='darkred', fontsize=14, fontname='Papyrus')
+    ax.tick_params(axis='y', colors='teal', width=2, direction='inout')
+    ax.set_facecolor('#f7f7f0')
+
+    # Clashy spines
+    ax.spines['left'].set_color('darkorange')
+    ax.spines['bottom'].set_color('hotpink')
+    ax.spines['top'].set_color('cyan')
+    ax.spines['right'].set_color('magenta')
+    ax.spines['top'].set_linewidth(2)
+    ax.spines['right'].set_linestyle('dashed')
+
+    plt.subplots_adjust(left=0.22, right=0.88, top=0.88, bottom=0.22)
+
+    st.pyplot(fig)
+
 
