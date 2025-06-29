@@ -157,7 +157,7 @@ with tab2:
 
     col1_row1, col2_row1 = st.columns(2)
 
-     with col1_row1:
+    with col1_row1:
         st.subheader("Total Applications, Admissions, and Enrollment Over Time")
 
         # Load data
