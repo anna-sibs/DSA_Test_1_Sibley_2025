@@ -153,12 +153,54 @@ with tab2:
     st.header("University Student Admissions Dashboard")
 
     # Row 1 - Two columns, 50/50
-    st.markdown("### Admissions and Enrollment")
+    st.markdown("## Admissions and Enrollment")
 
     col1_row1, col2_row1 = st.columns(2)
 
-    with col1_row1:
+     with col1_row1:
         st.subheader("Total Applications, Admissions, and Enrollment Over Time")
+
+        # Load data
+        students = pd.read_csv('university_student_dashboard_data.csv')
+
+        # Create a combined 'Term Label' for x-axis (e.g., "2015 Spring")
+        students['Term_Label'] = students['Year'].astype(str) + ' ' + students['Term']
+
+        # Sort chronologically
+        students = students.sort_values(by=['Year', 'Term'])
+
+        # Reorder columns: largest first (Applications → Admitted → Enrolled)
+        category_order = ['Enrolled', 'Admitted', 'Applications']
+
+        # Melt with correct stacking order
+        melted = students.melt(
+            id_vars='Term_Label',
+            value_vars=category_order,
+            var_name='Category',
+            value_name='Count'
+        )
+
+        # Reverse stacking order (largest on bottom)
+        melted['Category'] = pd.Categorical(melted['Category'], categories=category_order, ordered=True)
+
+        # Create stacked area chart
+        fig = px.area(
+            melted,
+            x='Term_Label',
+            y='Count',
+            color='Category',
+            category_orders={'Category': category_order},
+            title='Applications, Admitted, and Enrolled by Term',
+            labels={'Term_Label': 'Term', 'Count': 'Number of Students'},
+        )
+
+        fig.update_layout(
+            xaxis_tickangle=-45,
+            margin=dict(l=40, r=40, t=50, b=40)
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+
 
     with col2_row1:
         st.subheader("Enrollment by Deparment Over Time")
@@ -167,7 +209,7 @@ with tab2:
     st.markdown("---")
 
     # Row 2 - Two columns, 75/25
-    st.markdown("### Satisfaction, Retention, and Growth Rates")
+    st.markdown("## Satisfaction, Retention, and Growth Rates")
 
     col1_row2, col2_row2 = st.columns([3, 1])
 
