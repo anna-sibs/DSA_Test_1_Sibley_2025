@@ -156,6 +156,26 @@ with tab2:
     st.markdown("## Admissions and Enrollment")
 
     col1_row1, col2_row1 = st.columns(2)
+   
+
+        # Load dataset
+        students = pd.read_csv('university_student_dashboard_data.csv')
+        
+        # Create combined term label
+        students['Term_Label'] = students['Year'].astype(str) + ' ' + students['Term']
+        
+        # Sidebar term filter
+        st.sidebar.header("📅 Filter by Academic Term")
+        all_terms = sorted(students['Term_Label'].unique())
+        selected_terms = st.sidebar.multiselect(
+            label="Select Term(s):",
+            options=all_terms,
+            default=all_terms  # Show all terms by default
+        )
+        
+        # Apply filter to a shared DataFrame used everywhere else
+        filtered_students = students[students['Term_Label'].isin(selected_terms)].copy()
+
 
     with col1_row1:
         st.subheader("Total Applications, Admissions, and Enrollment Over Time")
