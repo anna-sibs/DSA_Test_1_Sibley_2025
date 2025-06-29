@@ -16,26 +16,83 @@ tab1, tab2, tab3 = st.tabs(["Q1: Airports", "Q2: University Dashboard", "Q3: Bes
 
 with tab1:
     st.header("🛫 Chicago O'Hare International Airport (ORD)")
-
     st.markdown("""
     ### ✈️ Problem 1: Flight Route Analysis
 
-    Select one major airport from the U.S. East Coast (e.g., **JFK**, **ATL**, **MIA**, **BOS**, **PHL**, etc.). Using available flight route data:
+    Select one major airport from the U.S. & using available flight route data:
 
     **Goals:**
-    1. 🗺️ Map all the direct routes from the selected airport.
-    2. 📊 Perform Exploratory Data Analysis (EDA) to understand:
+    1. Map all the direct routes from the selected airport.
+    2. Perform Exploratory Data Analysis (EDA) to understand:
         - Popular routes
         - Airport connectivity
         - Operational performance
-
-    **Suggested EDA Questions:**
-    - 🔝 What are the **top 5 destinations** by number of flights?
-    - 🕒 How does **flight volume vary by time of day or season**?
-    - 🧭 What percentage of flights are **domestic vs. international**?
-    - 🛬 Are there any **hub airports with significant traffic connections**?
-    - 🛫 What are the most **frequent airlines** operating from this airport?
     """)
+    import plotly.graph_objects as go
+import plotly.express as px
+
+st.subheader("🗺️ Flight Paths into O'Hare")
+
+st.markdown("""
+This interactive map visualizes **unique flight routes into Chicago O'Hare International Airport (ORD)**. Each route line represents a direct connection from a U.S. airport, and the color indicates the **origin state** of the flight.
+
+- Hover over a route to see the **origin airport name, city, and state**.
+- All lines are displayed at **50% transparency** to reveal route density visually.
+""")
+
+# Get a list of unique states
+unique_states = ord_enriched_unique['Origin_state'].unique()
+
+# Use a long Plotly qualitative color scale
+color_pool = px.colors.qualitative.Alphabet + px.colors.qualitative.Set3 + px.colors.qualitative.Dark24
+if len(unique_states) > len(color_pool):
+    st.error("Not enough unique colors for the number of states.")
+else:
+    # Create color map with 50% transparency
+    color_map = {
+        state: color.replace('rgb', 'rgba').replace(')', ',0.5)')
+        for state, color in zip(unique_states, color_pool)
+    }
+
+    # Create flight path lines
+    flight_paths = []
+    for i, row in ord_enriched_unique.iterrows():
+        state = row['Origin_state']
+        color = color_map[state]
+
+        flight_paths.append(
+            go.Scattergeo(
+                locationmode='USA-states',
+                lon=[row['Origin_longitude'], -87.9073],
+                lat=[row['Origin_latitude'], 41.9742],
+                mode='lines',
+                line=dict(width=1, color=color),
+                hoverinfo='text',
+                text=f"{row['Origin_airport_name']} ({row['Origin_city']}, {row['Origin_state']})",
+                name=row['Origin_state']
+            )
+        )
+
+    # Plot the map
+    fig = go.Figure(data=flight_paths)
+
+    fig.update_layout(
+        title="Unique Flight Routes into Chicago O'Hare (ORD) by Origin State",
+        geo=dict(
+            scope='usa',
+            projection_type='albers usa',
+            showland=True,
+            landcolor='rgb(243, 243, 243)',
+            subunitwidth=1,
+            countrywidth=1,
+            subunitcolor='rgb(217, 217, 217)',
+            countrycolor='rgb(217, 217, 217)'
+        ),
+        margin=dict(l=0, r=0, t=40, b=0)
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
 
 
 
