@@ -183,7 +183,7 @@ with tab2:
         )
         melted['Category'] = pd.Categorical(melted['Category'], categories=category_order, ordered=True)
 
-        fig = px.area(
+        fig_admissions = px.area(
             melted,
             x='Term_Label',
             y='Count',
@@ -193,12 +193,12 @@ with tab2:
             labels={'Term_Label': 'Term', 'Count': 'Number of Students'},
         )
 
-        fig.update_layout(
+        fig_admissions.update_layout(
             xaxis_tickangle=-45,
             margin=dict(l=40, r=40, t=50, b=40)
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig_admissions, use_container_width=True)
 
     with col2_row1:
         st.subheader("Enrollment by Department Over Time")
@@ -208,7 +208,7 @@ with tab2:
 
         filtered_students['Total_Enrolled'] = filtered_students[majors].sum(axis=1)
 
-        fig = go.Figure()
+        fig_departments = go.Figure()
         for i, major in enumerate(majors):
             percent = (filtered_students[major] / filtered_students['Total_Enrolled'] * 100).round(1)
             hover_text = (
@@ -217,7 +217,7 @@ with tab2:
                 " (" + percent.map('{:.1f}'.format) + "% of total)"
             )
 
-            fig.add_trace(go.Scatter(
+            fig_departments.add_trace(go.Scatter(
                 x=filtered_students['Term_Label'],
                 y=filtered_students[major],
                 mode='lines',
@@ -230,7 +230,7 @@ with tab2:
                 opacity=0.9
             ))
 
-        fig.update_layout(
+        fig_departments.update_layout(
             title='Enrolled Students by Major Over Time (% in Hover)',
             xaxis=dict(title='Term', tickangle=-45),
             yaxis=dict(title='Number of Enrolled Students'),
@@ -239,7 +239,7 @@ with tab2:
             legend_title_text='Major'
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig_departments, use_container_width=True)
 
     # Spacer
     st.markdown("---")
@@ -260,16 +260,14 @@ with tab2:
         }
 
         yearly = filtered_students.groupby('Year')[subjects + ['Student Satisfaction (%)']].sum().reset_index()
-
         growth = yearly.copy()
         for subject in subjects:
             growth[subject] = yearly[subject].pct_change() * 100
-
         growth['Satisfaction Change'] = yearly['Student Satisfaction (%)'].diff()
 
-        fig = go.Figure()
+        fig_growth_satisfaction = go.Figure()
         for subject in subjects:
-            fig.add_trace(go.Bar(
+            fig_growth_satisfaction.add_trace(go.Bar(
                 x=growth['Year'],
                 y=growth[subject],
                 name=subject.replace(' Enrolled', ''),
@@ -277,7 +275,7 @@ with tab2:
                 hovertemplate=f"%{{y:.1f}}% change<br><b>{subject.replace(' Enrolled', '')}</b><br>Year: %{{x}}<extra></extra>"
             ))
 
-        fig.add_trace(go.Scatter(
+        fig_growth_satisfaction.add_trace(go.Scatter(
             x=growth['Year'],
             y=growth['Satisfaction Change'],
             mode='lines+markers',
@@ -289,13 +287,13 @@ with tab2:
         ))
 
         for year in growth['Year'][1:]:
-            fig.add_vline(
+            fig_growth_satisfaction.add_vline(
                 x=year - 0.5,
                 line=dict(color='lightgray', width=1, dash='dash'),
                 layer='below'
             )
 
-        fig.update_layout(
+        fig_growth_satisfaction.update_layout(
             title='Year-over-Year Enrollment Growth by Subject Area<br>with Change in Student Satisfaction Rate',
             xaxis_title='Year',
             yaxis=dict(title='Enrollment Growth (%)'),
@@ -318,81 +316,8 @@ with tab2:
             plot_bgcolor='white'
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig_growth_satisfaction, use_container_width=True)
 
-    
-    with col1_row2:
-    st.subheader("Department Growth and Satisfaction Rates")
-
-    subjects = ['Engineering Enrolled', 'Business Enrolled', 'Arts Enrolled', 'Science Enrolled']
-    subject_colors = {
-        'Engineering Enrolled': '#1f77b4',
-        'Business Enrolled': '#ff7f0e',
-        'Arts Enrolled': '#2ca02c',
-        'Science Enrolled': '#d62728'
-    }
-
-    # Aggregate and calculate growth
-    yearly = filtered_students.groupby('Year')[subjects + ['Student Satisfaction (%)']].sum().reset_index()
-    growth = yearly.copy()
-    for subject in subjects:
-        growth[subject] = yearly[subject].pct_change() * 100
-    growth['Satisfaction Change'] = yearly['Student Satisfaction (%)'].diff()
-
-    # Create unique figure
-    fig_growth_satisfaction = go.Figure()
-
-    for subject in subjects:
-        fig_growth_satisfaction.add_trace(go.Bar(
-            x=growth['Year'],
-            y=growth[subject],
-            name=subject.replace(' Enrolled', ''),
-            marker_color=subject_colors[subject],
-            hovertemplate=f"%{{y:.1f}}% change<br><b>{subject.replace(' Enrolled', '')}</b><br>Year: %{{x}}<extra></extra>"
-        ))
-
-    fig_growth_satisfaction.add_trace(go.Scatter(
-        x=growth['Year'],
-        y=growth['Satisfaction Change'],
-        mode='lines+markers',
-        name='Change in Satisfaction Rate (%)',
-        line=dict(color='black', width=3, dash='dot'),
-        marker=dict(size=7),
-        yaxis='y2',
-        hovertemplate="Change: %{y:.1f}%<br>Year: %{x}<extra></extra>"
-    ))
-
-    for year in growth['Year'][1:]:
-        fig_growth_satisfaction.add_vline(
-            x=year - 0.5,
-            line=dict(color='lightgray', width=1, dash='dash'),
-            layer='below'
-        )
-
-    fig_growth_satisfaction.update_layout(
-        title='Year-over-Year Enrollment Growth by Subject Area<br>with Change in Student Satisfaction Rate',
-        xaxis_title='Year',
-        yaxis=dict(title='Enrollment Growth (%)'),
-        yaxis2=dict(
-            title='Change in Satisfaction Rate (%)',
-            overlaying='y',
-            side='right',
-            showgrid=False
-        ),
-        barmode='group',
-        legend=dict(
-            title='Metric',
-            x=1.05,
-            y=1,
-            xanchor='left',
-            yanchor='top'
-        ),
-        margin=dict(l=80, r=200, t=100, b=80),
-        hovermode='x unified',
-        plot_bgcolor='white'
-    )
-
-    st.plotly_chart(fig_growth_satisfaction, use_container_width=True)
 
 
 
