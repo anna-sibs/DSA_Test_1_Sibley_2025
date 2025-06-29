@@ -152,19 +152,20 @@ with tab1:
 with tab2:
     st.header("University Student Admissions Dashboard")
 
-    # Sidebar filter setup
+    # Load and prepare data
     students = pd.read_csv('university_student_dashboard_data.csv')
     students['Term_Label'] = students['Year'].astype(str) + ' ' + students['Term']
 
-    st.sidebar.header("📅 Filter by Academic Term")
-    all_terms = sorted(students['Term_Label'].unique())
-    selected_terms = st.sidebar.multiselect(
-        label="Select Term(s):",
-        options=all_terms,
-        default=all_terms
+    # Year Filter Below Header
+    st.markdown("Use the dropdown below to filter by academic year:")
+    all_years = sorted(students['Year'].unique())
+    selected_years = st.multiselect(
+        label="Select Year(s):",
+        options=all_years,
+        default=all_years
     )
 
-    filtered_students = students[students['Term_Label'].isin(selected_terms)].copy()
+    filtered_students = students[students['Year'].isin(selected_years)].copy()
 
     # Row 1 - Two columns
     st.markdown("## Admissions and Enrollment")
