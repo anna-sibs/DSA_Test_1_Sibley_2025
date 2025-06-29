@@ -214,6 +214,23 @@ This choropleth map visually highlights **which states send the most flights int
 """)
 
 # Choropleth map using the already-prepared `combined` DataFrame
+# Step 1: Group population from unique origin cities
+pop_by_state = ord_enriched_unique.groupby('Origin_state')['Origin_population'].sum().reset_index()
+
+# Step 2: Group number of flights from full data
+flights_by_state = ord_enriched.groupby('Origin_state').size().reset_index(name='Flight_Count')
+
+# Step 3: Merge and calculate flights per 100k residents
+combined = pd.merge(pop_by_state, flights_by_state, on='Origin_state')
+combined['Flights_per_100k'] = (combined['Flight_Count'] / combined['Origin_population']) * 100000
+
+# Step 4: Sort or enhance with hover text (optional, for visuals)
+combined['hover_text'] = (
+    "State: " + combined['Origin_state'] +
+    "<br>Flights: " + combined['Flight_Count'].astype(int).astype(str) +
+    "<br>Population: " + combined['Origin_population'].astype(int).astype(str)
+)
+
 fig5 = px.choropleth(
     combined,
     locations='Origin_state',
