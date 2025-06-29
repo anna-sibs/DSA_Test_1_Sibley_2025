@@ -270,13 +270,13 @@ with tab2:
 
     with col1_row2:
         st.subheader("Department Growth and Satisfaction Rates")
-
+    
         import pandas as pd
         import plotly.graph_objects as go
-
+    
         # Load data
         students = pd.read_csv('university_student_dashboard_data.csv')
-
+    
         # Define subject areas and colors
         subjects = ['Engineering Enrolled', 'Business Enrolled', 'Arts Enrolled', 'Science Enrolled']
         subject_colors = {
@@ -285,18 +285,18 @@ with tab2:
             'Arts Enrolled': '#2ca02c',
             'Science Enrolled': '#d62728'
         }
-
+    
         # Step 1: Aggregate enrollment by year
         yearly = students.groupby('Year')[subjects + ['Student Satisfaction (%)']].sum().reset_index()
-
+    
         # Step 2: Calculate year-over-year % change for each subject and satisfaction
         growth = yearly.copy()
         for subject in subjects:
             growth[subject] = yearly[subject].pct_change() * 100
-
+    
         # Satisfaction: absolute change (not percent)
         growth['Satisfaction Change'] = yearly['Student Satisfaction (%)'].diff()
-
+    
         # Step 3: Create bar chart traces for each subject
         fig = go.Figure()
         for subject in subjects:
@@ -307,7 +307,7 @@ with tab2:
                 marker_color=subject_colors[subject],
                 hovertemplate=f"%{{y:.1f}}% change<br><b>{subject.replace(' Enrolled', '')}</b><br>Year: %{{x}}<extra></extra>"
             ))
-
+    
         # Step 4: Add line for satisfaction change
         fig.add_trace(go.Scatter(
             x=growth['Year'],
@@ -319,7 +319,7 @@ with tab2:
             yaxis='y2',
             hovertemplate="Change: %{y:.1f}%<br>Year: %{x}<extra></extra>"
         ))
-
+    
         # Step 5: Add vertical year separators
         for year in growth['Year'][1:]:
             fig.add_vline(
@@ -327,8 +327,8 @@ with tab2:
                 line=dict(color='lightgray', width=1, dash='dash'),
                 layer='below'
             )
-
-        # Layout
+    
+        # Step 6: Layout
         fig.update_layout(
             title='Year-over-Year Enrollment Growth by Subject Area<br>with Change in Student Satisfaction Rate',
             xaxis_title='Year',
@@ -340,19 +340,20 @@ with tab2:
                 showgrid=False
             ),
             barmode='group',
-                    legend=dict(
-                        title='Metric',
-                        x=1.05,
-                        y=1,
-                        xanchor='left',
-                        yanchor='top',
-                    )
-            margin=dict(l=80, r=80, t=100, b=80),
+            legend=dict(
+                title='Metric',
+                x=1.05,
+                y=1,
+                xanchor='left',
+                yanchor='top'
+            ),
+            margin=dict(l=80, r=200, t=100, b=80),
             hovermode='x unified',
             plot_bgcolor='white'
         )
-
+    
         st.plotly_chart(fig, use_container_width=True)
+
 
 
     with col2_row2:
