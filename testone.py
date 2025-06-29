@@ -203,6 +203,103 @@ fig3.update_layout(
 
 st.plotly_chart(fig3, use_container_width=True)
 
+st.subheader("🗺️ Choropleth Map: Flights per 100,000 Residents")
+
+st.markdown("""
+This choropleth map visually highlights **which states send the most flights into Chicago O'Hare (ORD) on a per capita basis**.
+
+- Darker green means more flights per 100,000 residents.
+- Great for spotting **state-level dependencies** on ORD as a hub.
+- Hover to view flight counts and population.
+""")
+
+# Choropleth map using the already-prepared `combined` DataFrame
+fig5 = px.choropleth(
+    combined,
+    locations='Origin_state',
+    locationmode='USA-states',
+    color='Flights_per_100k',
+    color_continuous_scale='Greens',
+    scope='usa',
+    hover_data={
+        'Flights_per_100k': ':.1f',
+        'Flight_Count': True,
+        'Origin_population': True,
+        'Origin_state': False
+    },
+    labels={'Flights_per_100k': 'Flights per 100,000'},
+    title='Flights into ORD per 100,000 Residents by State'
+)
+
+fig5.update_layout(
+    margin=dict(l=0, r=0, t=50, b=0)
+)
+
+st.plotly_chart(fig5, use_container_width=True)
+
+
+
+
+
+st.subheader("✈️ Flights per 100,000 Residents by State")
+
+st.markdown("""
+This chart normalizes flight volume by population to show **which states send the most flights into Chicago O'Hare (ORD) relative to their population size**.
+
+- Calculated as: `Flights ÷ Population × 100,000`
+- Highlights states that may be more **dependent** on O'Hare or have **high travel demand** per capita.
+- Hover over each bar to see the exact flight and population numbers.
+""")
+
+# Step 1: Group population from unique origin cities
+pop_by_state = ord_enriched_unique.groupby('Origin_state')['Origin_population'].sum().reset_index()
+
+# Step 2: Group number of flights from full data
+flights_by_state = ord_enriched.groupby('Origin_state').size().reset_index(name='Flight_Count')
+
+# Step 3: Merge and calculate flights per 100k residents
+combined = pd.merge(pop_by_state, flights_by_state, on='Origin_state')
+combined['Flights_per_100k'] = (combined['Flight_Count'] / combined['Origin_population']) * 100000
+
+# Step 4: Create readable hover text
+combined['hover_text'] = (
+    "State: " + combined['Origin_state'] +
+    "<br>Flights: " + combined['Flight_Count'].astype(int).astype(str) +
+    "<br>Population: " + combined['Origin_population'].astype(int).astype(str)
+)
+
+# Step 5: Sort for visualization
+combined = combined.sort_values(by='Flights_per_100k', ascending=False)
+
+# Step 6: Plot horizontal bar chart
+fig4 = px.bar(
+    combined,
+    x='Flights_per_100k',
+    y='Origin_state',
+    orientation='h',
+    text=combined['Flights_per_100k'].round(1),
+    labels={
+        'Flights_per_100k': 'Flights per 100,000 Residents',
+        'Origin_state': 'State'
+    },
+    title='Flights into ORD per 100,000 Residents by State'
+)
+
+fig4.update_traces(
+    hoverinfo='text',
+    hovertext=combined['hover_text'],
+    marker_color='darkgreen',
+    textposition='outside'
+)
+
+fig4.update_layout(
+    xaxis_title='Flights per 100,000 Residents',
+    yaxis_title='Origin State',
+    showlegend=False,
+    margin=dict(l=40, r=40, t=60, b=40)
+)
+
+st.plotly_chart(fig4, use_container_width=True)
 
 
 with tab2:
