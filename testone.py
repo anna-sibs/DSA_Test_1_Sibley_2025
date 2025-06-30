@@ -480,10 +480,7 @@ Include a brief explanation comparing both visualizations.
         
         # Header
         st.header("Gender Pay Gap Across Dimensions")
-        # Dropdown to view by dimension
-        dimension_choice = st.selectbox("Select Dimension to View Category-Level Pay Ratios:", sorted(final_df['Dimension'].unique()))
-        filtered_view = final_df[final_df['Dimension'] == dimension_choice]
-        
+       
         
         # Load dataset
         genderpay = pd.read_csv('Glassdoor Gender Pay Gap.csv')
@@ -535,6 +532,9 @@ Include a brief explanation comparing both visualizations.
             })
         
         summary = final_df.groupby('Dimension').apply(compute_summary).reset_index()
+        # Dropdown to view by dimension
+        dimension_choice = st.selectbox("Select Dimension to View Category-Level Pay Ratios:", sorted(final_df['Dimension'].unique()))
+        filtered_view = final_df[final_df['Dimension'] == dimension_choice]
         
      
         # Show tables
