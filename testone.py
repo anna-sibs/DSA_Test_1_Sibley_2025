@@ -401,6 +401,80 @@ with tab3:
         plt.tight_layout()
         st.pyplot(fig)
 
+        st.subheader("Better Chart Highlighting Gender Pay Disparities")
+        
+        # Header
+        st.header("Gender Pay Gap Across Dimensions")
+        st.write("By every dimension, men out-earn women.")
+        
+        # Load dataset
+        genderpay = pd.read_csv('Glassdoor Gender Pay Gap.csv')
+        
+        # Create TotalPay column
+        genderpay['TotalPay'] = genderpay['BasePay'] + genderpay['Bonus']
+        
+        # Define dimensions and display names
+        group_cols = ['JobTitle', 'Education', 'Dept', 'Seniority', 'PerfEval', 'Age']
+        dimension_labels = {
+            'JobTitle': 'Job Title',
+            'Education': 'Education Level',
+            'Dept': 'Department',
+            'Seniority': 'Seniority Level',
+            'PerfEval': 'Performance Evaluation',
+            'Age': 'Age Group'
+        }
+        
+        # Process data into normalized earnings ratios
+        all_results = []
+        for col in group_cols:
+            group = genderpay.groupby([col, 'Gender'])['TotalPay'].mean().reset_index()
+            pivot = group.pivot(index=col, columns='Gender', values='TotalPay')
+            pivot['Male_ratio'] = pivot['Male'] / pivot[['Male', 'Female']].max(axis=1)
+            pivot['Female_ratio'] = pivot['Female'] / pivot[['Male', 'Female']].max(axis=1)
+            result = pivot[['Male_ratio', 'Female_ratio']].rename(columns={'Male_ratio': 'Male', 'Female_ratio': 'Female'}).reset_index()
+            result['Dimension'] = dimension_labels[col]
+            result = result.rename(columns={col: 'Category'})
+            all_results.append(result)
+        
+        # Combine into one dataframe
+        final_df = pd.concat(all_results, ignore_index=True)
+        final_df = final_df[['Dimension', 'Category', 'Male', 'Female']]
+        
+        # Compute summary
+        def compute_summary(group):
+            num_groups = group['Category'].nunique()
+            avg_male = int(round(group['Male'].mean() * 100))
+            avg_female = int(round(group['Female'].mean() * 100))
+            avg_gap = int(round((group['Male'] - group['Female']).abs().mean() * 100))
+            female_less = (group['Female'] < group['Male']).sum()
+            percent_female_less = int(round((female_less / num_groups) * 100))
+            return pd.Series({
+                'Number of Categories': num_groups,
+                '% of Categories Where Women Earn Less': percent_female_less,
+                'Average Male Earnings (%)': avg_male,
+                'Average Female Earnings (%)': avg_female,
+                'Average Earnings Gap (%)': avg_gap
+            })
+        
+        summary = final_df.groupby('Dimension').apply(compute_summary).reset_index()
+        
+        # Dropdown to view by dimension
+        dimension_choice = st.selectbox("Select Dimension to View Category-Level Pay Ratios:", sorted(final_df['Dimension'].unique()))
+        filtered_view = final_df[final_df['Dimension'] == dimension_choice]
+        
+        # Show tables
+        st.subheader("Earnings Ratio by Category")
+        st.dataframe(filtered_view.style.format({'Male': '{:.2%}', 'Female': '{:.2%}'}))
+        
+        st.subheader("Dimension-Level Summary")
+        st.dataframe(summary)
+        
+        # Optional: bar chart of % of categories where women earn less
+        st.subheader("Percent of Categories Where Women Earn Less")
+        st.bar_chart(summary.set_index('Dimension')['% of Categories Where Women Earn Less'])
+
+
+
 
     
 
