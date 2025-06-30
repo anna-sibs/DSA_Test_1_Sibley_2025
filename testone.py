@@ -86,6 +86,13 @@ with tab1:
     )
     st.plotly_chart(fig, use_container_width=True)
 
+    st.markdown("""
+    ### Learnings:
+    
+    As a major international airport and travel hub, **Chicago O'Hare** is a destination flight for airports around the world.  
+    The following graphic supports this knowledge — the sheer number of airport flights is clearly visible.  
+    Few patterns are visible otherwise, as color can only distinguish between limited variables.
+    """)
     # Flights by state
     st.subheader("📊 Number of Flights into O'Hare by State")
     state_counts = ord_enriched['Origin_state'].value_counts().reset_index()
@@ -98,6 +105,12 @@ with tab1:
         xaxis_title="Origin State", yaxis_title="Number of Flights",
         xaxis_tickangle=-45, bargap=0.2, margin=dict(l=20, r=20, t=60, b=40))
     st.plotly_chart(fig2, use_container_width=True)
+    st.markdown("""
+    ### Learnings:
+    
+    This graphic more clearly shows which airports send the most flights to **Chicago**.  
+    The top four states have unclear reasons for being so: **New York** and **California**, with large state populations and more than one international travel hub, are logical front runners — but otherwise there isn't a clear pattern?
+    """)
 
     # Stacked bar: population by city/state
     st.subheader("🏢 Origin City Populations by State")
@@ -113,6 +126,13 @@ with tab1:
     fig3.update_layout(barmode='stack', xaxis_tickangle=-45, yaxis_title='Total Population (Sum)',
                        showlegend=False, margin=dict(l=0, r=0, t=40, b=0))
     st.plotly_chart(fig3, use_container_width=True)
+    st.markdown("""
+    ### Learnings:
+    
+    Examining the populations represented by airports sending flights to **Chicago**, more is revealed.  
+    **New York** has two large airports that service the largest population in the country.  
+    This graphic shows that one reason a state may send more flights to Chicago than another is if it happens to have airports servicing a large population of people.
+    """)
 
     # Population-normalized flight count
     st.subheader("✈️ Flights per 100,000 Residents by State")
@@ -131,6 +151,13 @@ with tab1:
     fig4.update_layout(xaxis_title='Flights per 100,000 Residents', yaxis_title='Origin State',
                        showlegend=False, margin=dict(l=40, r=40, t=60, b=40))
     st.plotly_chart(fig4, use_container_width=True)
+    st.markdown("""
+    ### Learnings:
+    
+    When examining how many flights are sent to **Chicago per capita** by state, additional findings emerge.  
+    The states with high numbers of flights per capita tend to be **small population states** without major travel hubs or international airports—outliers rather than meaningful trends.  
+    Interestingly, **New York**, despite sending the most total flights to Chicago, has one of the **lowest numbers of flights per capita**.
+    """)
 
     # Choropleth
     st.subheader("🌍 Choropleth Map: Flights per 100,000 Residents")
@@ -143,6 +170,12 @@ with tab1:
         title='Flights into ORD per 100,000 Residents by State')
     fig5.update_layout(margin=dict(l=0, r=0, t=50, b=0))
     st.plotly_chart(fig5, use_container_width=True)
+    st.markdown("""
+    ### Learnings:
+    
+    Another view of the **number of flights to Chicago per capita**.  
+    Areas to consider investigating in the future include **why Vermont and Iowa** have such high numbers of flights to Chicago.
+    """)
 
 
 with tab2:
