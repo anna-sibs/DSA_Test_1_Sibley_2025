@@ -196,7 +196,12 @@ with tab2:
     **Dashboard Implementation:**
     1. Create a prototype in Python using Streamlit (hosted on Streamlit Cloud)  
     2. Ensure the dashboard provides insights on student trends over multiple years  
-    3. Provide key findings and actionable insights  
+    3. Provide key findings and actionable insights 
+
+    **Key Findings and Actionable Insights**
+    1. Retention and Satisfaction Rates: Retention and satisfaction rates have a strong correlation and there has been signifigant gains in student satisfaction. It is worth researching which of the two is the leading and lagging variable, and what actions you have the most control in potentially improving one, in hopes of achieving both. 
+    2. Decrease in Science Students: Compared to the other subjects, which have experienced steady year-over-year increases in enrollment, science students have decreased. It is worth researching the cause and effect of this. 
+    3. Steady Enrollment and Admissions: A key finding worth celebrating is the steady rate of admission, application, and enrollment. Another positive sign worth researching more is the increased rate of growth for applications; are students applying more, or is this university more desireable?
     """)
 
 
@@ -422,6 +427,17 @@ Include a brief explanation comparing both visualizations.
 
     with col1_row2:
         st.subheader("Ugly Earnings Chart")
+        st.markdown("""
+        ### Learnings:
+        
+        The following graph attempts to highlight **gender pay disparity** by summing total salary pay for each gender in the dataset.  
+        However, there are several issues:
+        
+        1. There are **not the same number of men and women** in the dataset, skewing totals.
+        2. The visualization **lacks nuance**—it does not explore patterns of inequality, offer insights or solutions, or inspire further analysis.
+        3. It **suffers from poor legibility** and does not clearly communicate its intended message.
+        """)
+
 
                     
         # Load dataset
@@ -463,6 +479,10 @@ Include a brief explanation comparing both visualizations.
         
         # Header
         st.header("Gender Pay Gap Across Dimensions")
+        # Dropdown to view by dimension
+        dimension_choice = st.selectbox("Select Dimension to View Category-Level Pay Ratios:", sorted(final_df['Dimension'].unique()))
+        filtered_view = final_df[final_df['Dimension'] == dimension_choice]
+        
         
         # Load dataset
         genderpay = pd.read_csv('Glassdoor Gender Pay Gap.csv')
@@ -515,10 +535,7 @@ Include a brief explanation comparing both visualizations.
         
         summary = final_df.groupby('Dimension').apply(compute_summary).reset_index()
         
-        # Dropdown to view by dimension
-        dimension_choice = st.selectbox("Select Dimension to View Category-Level Pay Ratios:", sorted(final_df['Dimension'].unique()))
-        filtered_view = final_df[final_df['Dimension'] == dimension_choice]
-        
+     
         # Show tables
         st.subheader("For Every $1 Made by a Man, Women will Earn Less by Almost All Dimensions.")
         st.dataframe(filtered_view.style.format({'Male': '{:.2%}', 'Female': '{:.2%}'}))
