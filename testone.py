@@ -540,7 +540,16 @@ Include a brief explanation comparing both visualizations.
         # Show tables
         st.subheader("For Every $1 Made by a Man, Women will Earn Less by Almost All Dimensions.")
         st.dataframe(filtered_view.style.format({'Male': '{:.2%}', 'Female': '{:.2%}'}))
+        st.markdown("""
+        **Learnings:**  
+        This graphic is not pretty, and could definitely look a bit better—if I'm being honest.  
+        However, it does a better job of illustrating the breadth and depth of gender pay inequality than the prior one.
         
+        1. **Clarity of Message:** It has a clear statement: *Do men out-earn women in every dimension?* This question invites the viewer to critically evaluate the data.  
+        2. **Interactive Engagement:** By incorporating all dimensions of pay inequality and allowing exploration (e.g., by age, profession, department), users can investigate categories most relevant to them, enhancing personal meaning-making.  
+        3. **Limitations Acknowledged:** While I’m not a statistician and this may not be the perfect visualization method, it is more honest, informative, and transparent than the 'Ugly' graph shown above.
+        """)
+
     
 
 
