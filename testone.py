@@ -7,10 +7,6 @@ import plotly.express as px
 st.set_page_config(page_title="My Streamlit Dashboard", layout="wide")
 st.title("Bridget Anna Sibley Test 1 DSA 506")
 
-# Sidebar (optional)
-st.sidebar.header("See ")
-st.sidebar.write("Use the tabs above to explore different views.")
-
 # Main tab setup
 tab1, tab2, tab3 = st.tabs(["Q1: Airports", "Q2: University Dashboard", "Q3: Best & Worst Graph"])
 
@@ -150,7 +146,23 @@ with tab1:
 
 
 with tab2:
-    st.header("University Student Admissions Dashboard")
+    st.markdown("""
+    ### Problem 2: University Student Admissions Dashboard
+
+An academic institution wants to monitor their admission process and students' satisfaction. Design a university dashboard that tracks student admissions, retention, and satisfaction. The data is in the file university_student_dashboard_data.csv. Consider the following aspects in your analysis:
+    **Metrics & KPIs:**
+       1. Total applications, admissions, and enrollments per term
+       2. Retention rate trends over time
+      3.  Student satisfaction scores over the years
+       4. Enrollment breakdown by department (Engineering, Business, Arts, Science)
+       5. Comparison between Spring vs. Fall term trends.
+      6.  Compare trends between departments, retention rates, and satisfaction levels.
+
+          **Dashboard Implementation:**
+        1. Create a prototype in Pyhon (streamlit cloud).
+        2. Ensure the dashboard provides insights on student trends over multiple years.
+        3. Provide key findings and actionable insights.
+    """)
 
     # Load and prepare data
     students = pd.read_csv('university_student_dashboard_data.csv')
