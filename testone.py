@@ -148,21 +148,24 @@ with tab1:
 with tab2:
     st.markdown("""
     ### Problem 2: University Student Admissions Dashboard
-
-An academic institution wants to monitor their admission process and students' satisfaction. Design a university dashboard that tracks student admissions, retention, and satisfaction. The data is in the file university_student_dashboard_data.csv. Consider the following aspects in your analysis:
+    
+    An academic institution wants to monitor their admission process and students' satisfaction.  
+    Design a university dashboard that tracks student admissions, retention, and satisfaction using the dataset `university_student_dashboard_data.csv`.
+    
     **Metrics & KPIs:**
-       1. Total applications, admissions, and enrollments per term
-       2. Retention rate trends over time
-      3.  Student satisfaction scores over the years
-       4. Enrollment breakdown by department (Engineering, Business, Arts, Science)
-       5. Comparison between Spring vs. Fall term trends.
-      6.  Compare trends between departments, retention rates, and satisfaction levels.
-
-          **Dashboard Implementation:**
-        1. Create a prototype in Pyhon (streamlit cloud).
-        2. Ensure the dashboard provides insights on student trends over multiple years.
-        3. Provide key findings and actionable insights.
+    1. Total applications, admissions, and enrollments per term  
+    2. Retention rate trends over time  
+    3. Student satisfaction scores over the years  
+    4. Enrollment breakdown by department (Engineering, Business, Arts, Science)  
+    5. Comparison between Spring vs. Fall term trends  
+    6. Comparison of trends between departments, retention rates, and satisfaction levels  
+    
+    **Dashboard Implementation:**
+    1. Create a prototype in Python using Streamlit (hosted on Streamlit Cloud)  
+    2. Ensure the dashboard provides insights on student trends over multiple years  
+    3. Provide key findings and actionable insights  
     """)
+
 
     # Load and prepare data
     students = pd.read_csv('university_student_dashboard_data.csv')
@@ -370,8 +373,15 @@ with col2_row2:
 
         
 with tab3:
-    st.header("Gender Pay Gap Visualizations: Best & Worst")
-    st.write("First, The Worst")
+        st.markdown("""
+    ### Problem 3: Gender Pay Gap Visualizations: Best & Worst
+    
+Find a real-world dataset from an open-source repository (Kaggle, Data.gov, UCI Machine Learning Repository, Open Data Portals). Perform an Exploratory Data Analysis (EDA) and create two visualizations for the same insight:
+
+    1. The WORST possible plot: A poorly designed visualization that misrepresents the data, is cluttered, lacks readability, or is misleading.
+    2. The IMPROVED version: A refined visualization that enhances clarity, conveys insight effectively, and follows best practices in visual analytics. In this case, it is important to provide a short explanation comparing both visualizations.
+
+    """)
 
     col1_row2, _ = st.columns([1, 0.01])  # single wide column, slight spacing
 
