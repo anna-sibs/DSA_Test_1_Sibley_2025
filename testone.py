@@ -185,7 +185,7 @@ with tab2:
     An academic institution wants to monitor their admission process and students' satisfaction.  
     Design a university dashboard that tracks student admissions, retention, and satisfaction using the dataset `university_student_dashboard_data.csv`.
     
-    **Metrics & KPIs:**
+    **Metrics & KPIs:**  
     1. Total applications, admissions, and enrollments per term  
     2. Retention rate trends over time  
     3. Student satisfaction scores over the years  
@@ -193,16 +193,17 @@ with tab2:
     5. Comparison between Spring vs. Fall term trends  
     6. Comparison of trends between departments, retention rates, and satisfaction levels  
     
-    **Dashboard Implementation:**
+    **Dashboard Implementation:**  
     1. Create a prototype in Python using Streamlit (hosted on Streamlit Cloud)  
     2. Ensure the dashboard provides insights on student trends over multiple years  
-    3. Provide key findings and actionable insights 
-
-    **Key Findings and Actionable Insights**
-    1. Retention and Satisfaction Rates: Retention and satisfaction rates have a strong correlation and there has been signifigant gains in student satisfaction. It is worth researching which of the two is the leading and lagging variable, and what actions you have the most control in potentially improving one, in hopes of achieving both. 
-    2. Decrease in Science Students: Compared to the other subjects, which have experienced steady year-over-year increases in enrollment, science students have decreased. It is worth researching the cause and effect of this. 
-    3. Steady Enrollment and Admissions: A key finding worth celebrating is the steady rate of admission, application, and enrollment. Another positive sign worth researching more is the increased rate of growth for applications; are students applying more, or is this university more desireable?
+    3. Provide key findings and actionable insights  
+    
+    **Key Findings and Actionable Insights:**  
+    1. **Retention and Satisfaction Rates:** Retention and satisfaction rates have a strong correlation, and there has been significant growth in student satisfaction. It is worth investigating which of the two is the leading or lagging variable, and which actions the university can take to influence one with the aim of improving both.  
+    2. **Decrease in Science Students:** Compared to other departments, which have experienced steady year-over-year increases in enrollment, the number of science students has decreased. This trend warrants further investigation into its causes and implications.  
+    3. **Steady Enrollment and Admissions:** A key positive finding is the consistent rate of applications, admissions, and enrollments. Additionally, the recent increase in application growth could signal rising student interest or improved desirability of the university—both worth exploring further.
     """)
+
 
 
     # Load and prepare data
