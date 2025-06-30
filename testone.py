@@ -386,8 +386,6 @@ with tab3:
         # Styling
         ax.set_title('Total Earnings by Gender', color='orange', fontsize=14, weight='bold')
         ax.set_ylabel('Total Earnings ($)', color='orange', fontsize=12)
-        ax.set_xticklabels(totals.index, color='orange', fontsize=12)
-        ax.tick_params(axis='y', colors='orange')
         ax.spines['bottom'].set_color('orange')
         ax.spines['left'].set_color('orange')
         ax.spines['top'].set_visible(False)
