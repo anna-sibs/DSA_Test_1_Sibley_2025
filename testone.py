@@ -405,7 +405,6 @@ with tab3:
         
         # Header
         st.header("Gender Pay Gap Across Dimensions")
-        st.write("By every dimension, men out-earn women.")
         
         # Load dataset
         genderpay = pd.read_csv('Glassdoor Gender Pay Gap.csv')
@@ -463,7 +462,7 @@ with tab3:
         filtered_view = final_df[final_df['Dimension'] == dimension_choice]
         
         # Show tables
-        st.subheader("Earnings Ratio by Category")
+        st.subheader("By every dimension, men out-earn women.")
         st.dataframe(filtered_view.style.format({'Male': '{:.2%}', 'Female': '{:.2%}'}))
         
     
