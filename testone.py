@@ -372,22 +372,25 @@ with col2_row2:
 
 
         
-with tab3:
-        st.markdown("""
-    ### Problem 3: Gender Pay Gap Visualizations: Best & Worst
-    
-Find a real-world dataset from an open-source repository (Kaggle, Data.gov, UCI Machine Learning Repository, Open Data Portals). Perform an Exploratory Data Analysis (EDA) and create two visualizations for the same insight:
+    with tab3:
+    st.markdown("""
+### Problem 3: Gender Pay Gap Visualizations: Best & Worst
 
-    1. The WORST possible plot: A poorly designed visualization that misrepresents the data, is cluttered, lacks readability, or is misleading.
-    2. The IMPROVED version: A refined visualization that enhances clarity, conveys insight effectively, and follows best practices in visual analytics. In this case, it is important to provide a short explanation comparing both visualizations.
+Find a real-world dataset from an open-source repository (Kaggle, Data.gov, UCI Machine Learning Repository, Open Data Portals).  
+Perform an Exploratory Data Analysis (EDA) and create two visualizations for the same insight:
 
-    """)
+1. **The WORST possible plot**: A poorly designed visualization that misrepresents the data, is cluttered, lacks readability, or is misleading.  
+2. **The IMPROVED version**: A refined visualization that enhances clarity, conveys insight effectively, and follows best practices in visual analytics.  
+   
+Include a brief explanation comparing both visualizations.
+""")
 
     col1_row2, _ = st.columns([1, 0.01])  # single wide column, slight spacing
 
     with col1_row2:
         st.subheader("Ugly Earnings Chart")
 
+                    
         # Load dataset
         genderpay = pd.read_csv('Glassdoor Gender Pay Gap.csv')
 
