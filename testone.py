@@ -372,7 +372,7 @@ with col2_row2:
 
 
         
-    with tab3:
+with tab3:
     st.markdown("""
 ### Problem 3: Gender Pay Gap Visualizations: Best & Worst
 
