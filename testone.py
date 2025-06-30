@@ -466,14 +466,7 @@ with tab3:
         st.subheader("Earnings Ratio by Category")
         st.dataframe(filtered_view.style.format({'Male': '{:.2%}', 'Female': '{:.2%}'}))
         
-        st.subheader("Dimension-Level Summary")
-        st.dataframe(summary)
-        
-        # Optional: bar chart of % of categories where women earn less
-        st.subheader("Percent of Categories Where Women Earn Less")
-        st.bar_chart(summary.set_index('Dimension')['% of Categories Where Women Earn Less'])
-
-
+    
 
 
     
