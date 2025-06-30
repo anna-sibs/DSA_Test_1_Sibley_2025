@@ -462,7 +462,7 @@ with tab3:
         filtered_view = final_df[final_df['Dimension'] == dimension_choice]
         
         # Show tables
-        st.subheader("By every dimension, men out-earn women.")
+        st.subheader("For Every $1 Made by a Man, Women will Earn Less by Almost All Dimensions.")
         st.dataframe(filtered_view.style.format({'Male': '{:.2%}', 'Female': '{:.2%}'}))
         
     
