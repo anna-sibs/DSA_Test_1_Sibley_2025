@@ -423,7 +423,7 @@ Perform an Exploratory Data Analysis (EDA) and create two visualizations for the
    
 Include a brief explanation comparing both visualizations.
 """)
-
+    st.markdown("[See Source – Glassdoor: Analyze Gender Pay Gap](https://www.kaggle.com/datasets/nilimajauhari/glassdoor-analyze-gender-pay-gap)")
     col1_row2, _ = st.columns([1, 0.01])  # single wide column, slight spacing
 
     with col1_row2:
